@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from vercel_wsgi import handle_request
 import requests
 
 app = Flask(__name__)
@@ -12,14 +13,8 @@ def get_player_info(Id):
         "Content-Type": "application/json",
         "Origin": "https://shop2game.com",
         "Referer": "https://shop2game.com/app",
-        "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": "Windows",
-        "Sec-Fetch-Dest": "empty",
-        "Sec-Fetch-Mode": "cors",
-        "Sec-Fetch-Site": "same-origin",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
-        "x-datadome-clientid": "your-datadome-client-id",
+        "User-Agent": "Mozilla/5.0",
+        "x-datadome-clientid": "your-client-id"
     }
     payload = {
         "app_id": 100067,
@@ -53,5 +48,6 @@ def region():
     except Exception:
         return jsonify({"message": "UID not found, please check the UID"}), 200
 
-# Vercel will automatically detect this as the handler
-handler = app
+# ✅ Export correct handler for Vercel
+def handler(environ, start_response):
+    return handle_request(app, environ, start_response)
