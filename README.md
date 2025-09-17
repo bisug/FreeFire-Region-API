@@ -1,3 +1,5 @@
+Code is not working!
+
 # 🌍 Free Fire Region Fetcher API
 
 A simple Flask API that fetches the **player region** and **nickname** from a Free Fire UID.
